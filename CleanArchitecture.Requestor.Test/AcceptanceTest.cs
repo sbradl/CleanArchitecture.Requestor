@@ -11,7 +11,7 @@ namespace CleanArchitecture.Requestor.Test
         public AcceptanceTest()
         {
             RequestBuilder.Instance.Register("add_user", AddUserRequestBuilder.BuildAddUserRequestFrom);
-            UseCaseFactory.Instance.Register("add_user", () => new AddUserUseCase(n => addedUser = n));
+            UseCaseFactory.Instance.Register("add_user", () => new AddUserUseCase(n => this.addedUser = n));
         }
         
         [TestMethod]
