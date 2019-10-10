@@ -1,3 +1,5 @@
+![Travis-CI](https://travis-ci.org/sbradl/CleanArchitecture.Requestor.svg?branch=master)
+
 # CleanArchitecture.Requestor
 C# implementation of the Clean Architecture Requestor component.
 
