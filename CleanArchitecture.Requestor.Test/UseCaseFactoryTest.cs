@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CleanArchitecture.Requestor.Test
 {
     [TestClass]
-    public class UseCaseFactoryTest
+    public sealed class UseCaseFactoryTest
     {
         [TestMethod]
         [ExpectedException(typeof(UseCaseFactory.UnregisteredUseCase))]

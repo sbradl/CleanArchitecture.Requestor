@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CleanArchitecture.Requestor.Test
 {
     [TestClass]
-    public class RequestBuilderTest
+    public sealed class RequestBuilderTest
     {
         [TestMethod]
         [ExpectedException(typeof(RequestBuilder.UnregisteredRequest))]

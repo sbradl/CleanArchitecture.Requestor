@@ -10,4 +10,4 @@ deploy:
   provider: script
   script: chmod +x ./release.sh && ./release.sh $ApiKey $Source
   on: 
-    branch: master
+    tags: true
