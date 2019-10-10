@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -27,10 +26,8 @@ namespace CleanArchitecture.Requestor.Test
 
             IRequest BuildRequest()
             {
-                return RequestBuilder.Instance.BuildRequest("add_user", new Dictionary<string, object>
-                {
-                    {"user_name", "Stefan"}
-                });
+                return RequestBuilder.Instance.BuildRequest("add_user", new RequestProperties()
+                    .Set("user_name", "Stefan"));
             }
             
             void ExecuteUseCase()
@@ -43,11 +40,11 @@ namespace CleanArchitecture.Requestor.Test
 
         private static class AddUserRequestBuilder
         {
-            public static IRequest BuildAddUserRequestFrom(IDictionary<string, object> properties)
+            public static IRequest BuildAddUserRequestFrom(RequestProperties properties)
             {
                 return new AddUserRequest
                 {
-                    UserName = (string) properties["user_name"]
+                    UserName = properties.GetString("user_name")
                 };
             } 
         }

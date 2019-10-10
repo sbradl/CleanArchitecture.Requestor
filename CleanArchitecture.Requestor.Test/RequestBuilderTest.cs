@@ -72,8 +72,8 @@ namespace CleanArchitecture.Requestor.Test
         [TestMethod]
         public void BuildRequest_PassesPropertiesToRegisteredBuilder()
         {
-            IDictionary<string, object> passedProperties = null;
-            IDictionary<string, object> propertiesToPass = new Dictionary<string, object>();
+            RequestProperties passedProperties = null;
+            var propertiesToPass = new RequestProperties();
             RequestBuilder.Instance.Register("REQ5", p => { passedProperties = p; return new Request(); });
 
             RequestBuilder.Instance.BuildRequest("req5", propertiesToPass);

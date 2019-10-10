@@ -8,12 +8,12 @@ namespace CleanArchitecture.Requestor
         private static readonly Lazy<RequestBuilder>
             LazyInstance = new Lazy<RequestBuilder>(() => new RequestBuilder());
 
-        private readonly IDictionary<string, Func<IDictionary<string, object>, IRequest>> requestBuilders =
-            new Dictionary<string, Func<IDictionary<string, object>, IRequest>>();
+        private readonly IDictionary<string, Func<RequestProperties, IRequest>> requestBuilders =
+            new Dictionary<string, Func<RequestProperties, IRequest>>();
 
         public static RequestBuilder Instance => LazyInstance.Value;
 
-        public void Register(string requestName, Func<IDictionary<string, object>, IRequest> requestBuilder)
+        public void Register(string requestName, Func<RequestProperties, IRequest> requestBuilder)
         {
             requestName = requestName.ToUpperInvariant();
 
@@ -23,7 +23,7 @@ namespace CleanArchitecture.Requestor
             this.requestBuilders.Add(requestName, requestBuilder);
         }
 
-        public IRequest BuildRequest(string name, IDictionary<string, object> properties)
+        public IRequest BuildRequest(string name, RequestProperties properties)
         {
             name = name.ToUpperInvariant();
             
