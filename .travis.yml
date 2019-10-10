@@ -4,4 +4,10 @@ dotnet: 2.2.108
 solution: CleanArchitecture.Requestor.sln
 script: 
   - dotnet restore
-  - dotnet test
+  - dotnet test -c Release
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: chmod +x ./release.sh && ./release.sh $ApiKey $Source
+  on: 
+    branch: master
