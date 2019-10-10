@@ -1,0 +1,28 @@
+@startuml
+
+class App
+
+package "Requestor" {
+    interface IRequest
+    interface IUseCase {
+        void Execute(IRequest request)
+    }
+    
+    class RequestBuilder {
+        void Register(string name, Func builder)
+        IRequest BuildRequest(string name, Map properties)
+    }
+    
+    class UseCaseFactory {
+        void Register(string name, Func factory)
+        IUseCase CreateUseCase(string name)
+    }
+    
+    RequestBuilder "builds" --> IRequest
+    UseCaseFactory "creates" --> IUseCase
+}
+
+App "register" ---> RequestBuilder
+App "register" ---> UseCaseFactory
+
+@enduml
