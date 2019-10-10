@@ -3,10 +3,20 @@
 # CleanArchitecture.Requestor
 C# implementation of the Clean Architecture Requestor component.
 
+# TLDR;
+- install the NuGet package in your controller and use case projects as well as your "main" project https://www.nuget.org/packages/CleanArchitecture.Requestor/
+- in your use case projects: implement RequestBuilders, UseCases and Request Dto's
+- in main: register requests and use cases with the UseCaseFactory and RequestBuilder
+- in controllers: 
+    - create request
+    - create use case
+    - execute use case
+    
+See the [Acceptance test](CleanArchitecture.Requestor.Test/AcceptanceTest.cs) for an example.
+
 # Why?
 The requestor component exists to decouple the controllers from the implementations of use cases and their concrete request data structures. 
 The benefit of this approach is that the controllers do not always need to be recompiled whenever the implementation of a use case changes.
-
 
 
 # What's in there?
@@ -22,7 +32,7 @@ This interface contains the *Execute* method which will be called by the control
 Implementations of this interface have to downcast the request object to the correct type. According to the clean architecture type-safety is sacrificed at this point to allow independent deployability.
 
 ## RequestBuilder
-This class functions as a registry for different request builders. These builders are supposed to be registered by "main" (the actual application component which wire everything together).
+This class functions as a registry for different request builders. These builders are supposed to be registered by "main" (the actual application component which wires everything together).
 
 ## UseCaseFactory
 Similar to the request builder this class functions as a registry for different factory functions which create use case instances.
