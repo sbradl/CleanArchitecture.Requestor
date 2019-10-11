@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -70,8 +71,9 @@ namespace CleanArchitecture.Requestor.Test
         
         private sealed class UseCase1 : IUseCase
         {
-            public void Execute(IRequest request)
+            public Task Execute(IRequest request)
             {
+                return Task.CompletedTask;
             }
         }
     }

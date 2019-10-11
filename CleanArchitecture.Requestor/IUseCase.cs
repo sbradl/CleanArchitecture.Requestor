@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace CleanArchitecture.Requestor
 {
     public interface IUseCase
     {
-        void Execute(IRequest request);
+        Task Execute(IRequest request);
     }
 }

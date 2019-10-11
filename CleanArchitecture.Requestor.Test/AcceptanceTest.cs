@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -63,10 +64,12 @@ namespace CleanArchitecture.Requestor.Test
                 this.onUserAdded = onUserAdded;
             }
             
-            public void Execute(IRequest request)
+            public Task Execute(IRequest request)
             {
                 var r = (AddUserRequest)request;
                 this.onUserAdded(r.UserName);
+                
+                return Task.CompletedTask;
             }
         }
     }
