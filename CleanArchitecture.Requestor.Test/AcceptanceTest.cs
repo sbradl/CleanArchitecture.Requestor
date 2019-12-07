@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -22,7 +23,7 @@ namespace CleanArchitecture.Requestor.Test
             
             ExecuteUseCase();
             
-            Assert.AreEqual("Stefan", this.addedUser);
+            this.addedUser.Should().Be("Stefan");
             
 
             IRequest BuildRequest()

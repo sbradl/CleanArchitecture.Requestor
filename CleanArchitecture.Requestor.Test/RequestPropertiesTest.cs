@@ -1,3 +1,5 @@
+using System;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -8,33 +10,42 @@ namespace CleanArchitecture.Requestor.Test
         [TestMethod]
         public void SetBoolean()
         {
-            Assert.IsTrue(new RequestProperties()
+            new RequestProperties()
                 .Set("key", true)
-                .GetBoolean("keY"));
+                .GetBoolean("keY").Should().BeTrue();
         }
 
         [TestMethod]
         public void SetString()
         {
-            Assert.AreEqual("value", new RequestProperties()
+            new RequestProperties()
                 .Set("key", "value")
-                .GetString("keY"));
+                .GetString("keY").Should().Be("value");
         }
 
         [TestMethod]
         public void SetInt()
         {
-            Assert.AreEqual(42, new RequestProperties()
+            new RequestProperties()
                 .Set("key", 42)
-                .GetInt("keY"));
+                .GetInt("keY").Should().Be(42);
         }
 
         [TestMethod]
         public void SetDouble()
         {
-            Assert.AreEqual(42.0, new RequestProperties()
+            new RequestProperties()
                 .Set("key", 42.0)
-                .GetDouble("keY"), double.Epsilon);
+                .GetDouble("keY").Should().Be(42.0);
+        }
+
+        [TestMethod]
+        public void GivenMissingProperty_GetFails()
+        {
+            Action tryToGetProperty = () => new RequestProperties().GetString("unknown-key");
+
+            tryToGetProperty.Should().Throw<RequestProperties.UnknownRequestProperty>()
+                .And.PropertyName.Should().Be("UNKNOWN-KEY");
         }
     }
 }

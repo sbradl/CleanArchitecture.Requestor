@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -53,8 +54,8 @@ namespace CleanArchitecture.Requestor.Test
             }
             catch (UseCaseFactory.UseCaseAlreadyRegistered e)
             {
-                StringAssert.Contains(e.Message, "UC4");
-                Assert.AreEqual("UC4", e.UseCaseName);
+                e.Message.Should().Contain("UC4");
+                e.UseCaseName.Should().Be("UC4");
             }
         }
 
@@ -64,9 +65,9 @@ namespace CleanArchitecture.Requestor.Test
             UseCaseFactory.Instance.Register("UC5", () => new UseCase1());
             var instance1 = UseCaseFactory.Instance.CreateUseCase("UC5");
             var instance2 = UseCaseFactory.Instance.CreateUseCase("UC5");
-            
-            Assert.IsInstanceOfType(instance1, typeof(UseCase1));
-            Assert.AreNotSame(instance1, instance2);
+
+            instance1.Should().BeOfType<UseCase1>();
+            instance1.Should().NotBeSameAs(instance2);
         }
         
         private sealed class UseCase1 : IUseCase

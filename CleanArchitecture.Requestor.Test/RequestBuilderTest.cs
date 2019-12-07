@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CleanArchitecture.Requestor.Test
@@ -21,8 +22,8 @@ namespace CleanArchitecture.Requestor.Test
             }
             catch (RequestBuilder.UnregisteredRequest e)
             {
-                StringAssert.Contains(e.Message, "REQ1");
-                Assert.AreEqual("REQ1", e.RequestName);
+                e.Message.Should().Contain("REQ1");
+                e.RequestName.Should().Be("REQ1");
             }
         }
 
@@ -41,7 +42,7 @@ namespace CleanArchitecture.Requestor.Test
             RequestBuilder.Instance.Register("REQ2", _ => new Request());
             RequestBuilder.Instance.Register("req2", _ => new Request());
         }
-        
+
         [TestMethod]
         public void AlreadyRegisteredRequestError_ContainsRequestName()
         {
@@ -52,8 +53,8 @@ namespace CleanArchitecture.Requestor.Test
             }
             catch (RequestBuilder.RequestAlreadyRegistered e)
             {
-                StringAssert.Contains(e.Message, "REQ3");
-                Assert.AreEqual("REQ3", e.RequestName);
+                e.Message.Should().Contain("REQ3");
+                e.RequestName.Should().Be("REQ3");
             }
         }
 
@@ -63,9 +64,9 @@ namespace CleanArchitecture.Requestor.Test
             RequestBuilder.Instance.Register("REQ4", _ => new Request());
             var instance1 = RequestBuilder.Instance.BuildRequest("REQ4", null);
             var instance2 = RequestBuilder.Instance.BuildRequest("REQ4", null);
-            
-            Assert.IsInstanceOfType(instance1, typeof(Request));
-            Assert.AreNotSame(instance1, instance2);
+
+            instance1.Should().BeOfType<Request>();
+            instance1.Should().NotBeSameAs(instance2);
         }
 
         [TestMethod]
@@ -73,13 +74,17 @@ namespace CleanArchitecture.Requestor.Test
         {
             RequestProperties passedProperties = null;
             var propertiesToPass = new RequestProperties();
-            RequestBuilder.Instance.Register("REQ5", p => { passedProperties = p; return new Request(); });
+            RequestBuilder.Instance.Register("REQ5", p =>
+            {
+                passedProperties = p;
+                return new Request();
+            });
 
             RequestBuilder.Instance.BuildRequest("req5", propertiesToPass);
-            
-            Assert.AreSame(propertiesToPass, passedProperties);
+
+            propertiesToPass.Should().BeSameAs(passedProperties);
         }
-        
+
         private sealed class Request : IRequest
         {
         }

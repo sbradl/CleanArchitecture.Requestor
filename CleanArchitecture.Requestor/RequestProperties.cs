@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CleanArchitecture.Requestor
@@ -61,7 +62,22 @@ namespace CleanArchitecture.Requestor
 
         private object GetObject(string key)
         {
-            return this.properties[key.ToUpperInvariant()];
+            key = key.ToUpperInvariant();
+            
+            if (!this.properties.ContainsKey(key))
+                throw new UnknownRequestProperty(key);
+    
+            return this.properties[key];
+        }
+
+        public sealed class UnknownRequestProperty : Exception
+        {
+            public string PropertyName { get; }
+
+            public UnknownRequestProperty(string propertyName)
+            {
+                this.PropertyName = propertyName;
+            }
         }
     }
 }
