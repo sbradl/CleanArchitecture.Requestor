@@ -12,7 +12,7 @@ namespace CleanArchitecture.Requestor.Test
         
         public AcceptanceTest()
         {
-            RequestBuilder.Instance.Register("add_user", AddUserRequestBuilder.BuildAddUserRequestFrom);
+            RequestBuilder.Instance.Register("add_user", () => new AddUserRequestBuilder());
             UseCaseFactory.Instance.Register("add_user", () => new AddUserUseCase(n => this.addedUser = n));
         }
         
@@ -40,9 +40,9 @@ namespace CleanArchitecture.Requestor.Test
             }
         }
 
-        private static class AddUserRequestBuilder
+        private sealed class AddUserRequestBuilder : IRequestBuilder
         {
-            public static IRequest BuildAddUserRequestFrom(RequestProperties properties)
+            public IRequest BuildRequestFrom(RequestProperties properties)
             {
                 return new AddUserRequest
                 {

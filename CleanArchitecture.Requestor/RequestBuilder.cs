@@ -8,12 +8,12 @@ namespace CleanArchitecture.Requestor
         private static readonly Lazy<RequestBuilder>
             LazyInstance = new Lazy<RequestBuilder>(() => new RequestBuilder());
 
-        private readonly IDictionary<string, Func<RequestProperties, IRequest>> requestBuilders =
-            new Dictionary<string, Func<RequestProperties, IRequest>>();
+        private readonly IDictionary<string, Func<IRequestBuilder>> requestBuilders =
+            new Dictionary<string, Func<IRequestBuilder>>();
 
         public static RequestBuilder Instance => LazyInstance.Value;
 
-        public void Register(string requestName, Func<RequestProperties, IRequest> requestBuilder)
+        public void Register(string requestName, Func<IRequestBuilder> requestBuilder)
         {
             requestName = requestName.ToUpperInvariant();
 
@@ -30,7 +30,7 @@ namespace CleanArchitecture.Requestor
             if (!this.requestBuilders.ContainsKey(name))
                 throw new UnregisteredRequest(name);
 
-            return this.requestBuilders[name](properties);
+            return this.requestBuilders[name]().BuildRequestFrom(properties);
         }
 
         public sealed class UnregisteredRequest : Exception

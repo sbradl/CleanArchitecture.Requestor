@@ -31,16 +31,16 @@ namespace CleanArchitecture.Requestor.Test
         [ExpectedException(typeof(RequestBuilder.RequestAlreadyRegistered))]
         public void RegisterTwice_IsNotAllowed()
         {
-            RequestBuilder.Instance.Register("REQ2", _ => new Request());
-            RequestBuilder.Instance.Register("REQ2", _ => new Request());
+            RequestBuilder.Instance.Register("REQ2", () => new TestRequestBuilder());
+            RequestBuilder.Instance.Register("REQ2", () => new TestRequestBuilder());
         }
 
         [TestMethod]
         [ExpectedException(typeof(RequestBuilder.RequestAlreadyRegistered))]
         public void Register_IgnoresCase()
         {
-            RequestBuilder.Instance.Register("REQ2", _ => new Request());
-            RequestBuilder.Instance.Register("req2", _ => new Request());
+            RequestBuilder.Instance.Register("REQ2", () => new TestRequestBuilder());
+            RequestBuilder.Instance.Register("req2", () => new TestRequestBuilder());
         }
 
         [TestMethod]
@@ -48,8 +48,8 @@ namespace CleanArchitecture.Requestor.Test
         {
             try
             {
-                RequestBuilder.Instance.Register("req3", _ => new Request());
-                RequestBuilder.Instance.Register("req3", _ => new Request());
+                RequestBuilder.Instance.Register("req3", () => new TestRequestBuilder());
+                RequestBuilder.Instance.Register("req3", () => new TestRequestBuilder());
             }
             catch (RequestBuilder.RequestAlreadyRegistered e)
             {
@@ -61,31 +61,40 @@ namespace CleanArchitecture.Requestor.Test
         [TestMethod]
         public void GivenRegisteredRequest_BuildRequestReturnsNewInstance()
         {
-            RequestBuilder.Instance.Register("REQ4", _ => new Request());
+            RequestBuilder.Instance.Register("REQ4", () => new TestRequestBuilder());
             var instance1 = RequestBuilder.Instance.BuildRequest("REQ4", null);
             var instance2 = RequestBuilder.Instance.BuildRequest("REQ4", null);
 
-            instance1.Should().BeOfType<Request>();
+            instance1.Should().BeOfType<TestRequest>();
             instance1.Should().NotBeSameAs(instance2);
         }
 
         [TestMethod]
         public void BuildRequest_PassesPropertiesToRegisteredBuilder()
         {
-            RequestProperties passedProperties = null;
+            var builder = new TestRequestBuilder();
+            
             var propertiesToPass = new RequestProperties();
-            RequestBuilder.Instance.Register("REQ5", p =>
-            {
-                passedProperties = p;
-                return new Request();
-            });
+            RequestBuilder.Instance.Register("REQ5", () => builder);
 
             RequestBuilder.Instance.BuildRequest("req5", propertiesToPass);
 
-            propertiesToPass.Should().BeSameAs(passedProperties);
+            propertiesToPass.Should().BeSameAs(builder.PassedProperties);
         }
 
-        private sealed class Request : IRequest
+        private sealed class TestRequestBuilder : IRequestBuilder
+        {
+            public RequestProperties PassedProperties { get; private set; }
+            
+            public IRequest BuildRequestFrom(RequestProperties requestProperties)
+            {
+                this.PassedProperties = requestProperties;
+                
+                return new TestRequest();
+            }
+        }
+
+        private sealed class TestRequest : IRequest
         {
         }
     }
