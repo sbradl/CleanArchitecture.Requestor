@@ -1,83 +1,82 @@
 using System;
 using System.Collections.Generic;
 
-namespace CleanArchitecture.Requestor
+namespace CleanArchitecture.Requestor;
+
+public sealed class RequestProperties
 {
-    public sealed class RequestProperties
-    {
-        private readonly IDictionary<string, object> properties = new Dictionary<string, object>();
-        
-        public RequestProperties Set(string key, string value)
-        {
-            SetObject(key, value);
-            
-            return this;
-        }
-
-        public string GetString(string key)
-        {
-            return (string) GetObject(key);
-        }
-
-        public RequestProperties Set(string key, long value)
-        {
-            SetObject(key, value);
-
-            return this;
-        }
-
-        public long GetInt(string key)
-        {
-            return (long) GetObject(key);
-        }
-
-        public RequestProperties Set(string key, bool value)
-        {
-            SetObject(key, value);
-
-            return this;
-        }
-
-        public bool GetBoolean(string key)
-        {
-            return (bool) GetObject(key);
-        }
-
-        public RequestProperties Set(string key, double value)
-        {
-            SetObject(key, value);
-
-            return this;
-        }
-
-        public double GetDouble(string key)
-        {
-            return (double) GetObject(key);
-        }
-
-        private void SetObject(string key, object value)
-        {
-            this.properties[key.ToUpperInvariant()] = value;
-        }
-
-        private object GetObject(string key)
-        {
-            key = key.ToUpperInvariant();
-            
-            if (!this.properties.ContainsKey(key))
-                throw new UnknownRequestProperty(key);
+    private readonly IDictionary<string, object> properties = new Dictionary<string, object>();
     
-            return this.properties[key];
-        }
+    public RequestProperties Set(string key, string value)
+    {
+        SetObject(key, value);
+        
+        return this;
+    }
 
-        public sealed class UnknownRequestProperty : Exception
+    public string GetString(string key)
+    {
+        return (string) GetObject(key);
+    }
+
+    public RequestProperties Set(string key, long value)
+    {
+        SetObject(key, value);
+
+        return this;
+    }
+
+    public long GetInt(string key)
+    {
+        return (long) GetObject(key);
+    }
+
+    public RequestProperties Set(string key, bool value)
+    {
+        SetObject(key, value);
+
+        return this;
+    }
+
+    public bool GetBoolean(string key)
+    {
+        return (bool) GetObject(key);
+    }
+
+    public RequestProperties Set(string key, double value)
+    {
+        SetObject(key, value);
+
+        return this;
+    }
+
+    public double GetDouble(string key)
+    {
+        return (double) GetObject(key);
+    }
+
+    private void SetObject(string key, object value)
+    {
+        this.properties[key.ToUpperInvariant()] = value;
+    }
+
+    private object GetObject(string key)
+    {
+        key = key.ToUpperInvariant();
+        
+        if (!this.properties.ContainsKey(key))
+        throw new UnknownRequestProperty(key);
+        
+        return this.properties[key];
+    }
+
+    public sealed class UnknownRequestProperty : Exception
+    {
+        public string PropertyName { get; }
+
+        public UnknownRequestProperty(string propertyName)
         {
-            public string PropertyName { get; }
-
-            public UnknownRequestProperty(string propertyName)
-            {
-                this.PropertyName = propertyName;
-            }
+            this.PropertyName = propertyName;
         }
     }
 }

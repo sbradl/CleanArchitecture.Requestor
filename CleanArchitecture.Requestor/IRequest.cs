@@ -1,6 +1,5 @@
-namespace CleanArchitecture.Requestor
+namespace CleanArchitecture.Requestor;
+
+public interface IRequest
 {
-    public interface IRequest
-    {
-    }
 }

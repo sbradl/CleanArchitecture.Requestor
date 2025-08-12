@@ -1,7 +1,6 @@
-namespace CleanArchitecture.Requestor
+namespace CleanArchitecture.Requestor;
+
+public interface IRequestBuilder
 {
-    public interface IRequestBuilder
-    {
-        IRequest BuildRequestFrom(RequestProperties requestProperties);
-    }
+    IRequest BuildRequestFrom(RequestProperties requestProperties);
 }
